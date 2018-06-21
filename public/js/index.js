@@ -14,7 +14,6 @@ socket.on('newMessage', function(message) {
   var sender = message.from;
   li.text(`${sender === 'Admin' ? '' : sender + ': '} ${message.text}`);
   $('#messages').append(li);
-  $('[name=message]').val('');
 });
 
 jQuery('#message-form').on('submit', function(e) {
@@ -31,5 +30,6 @@ jQuery('#message-form').on('submit', function(e) {
         console.log(data);
       }
     );
+    $('[name=message]').val('');
   }
 });
