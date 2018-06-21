@@ -10,30 +10,26 @@ socket.on('disconnect', function() {
 
 socket.on('newMessage', function(message) {
   console.log('Received New Message: ', message);
-  var li = jQuery('<li></li>');
-  li.text(`${message.from}: ${message.text}`);
-  jQuery('#messages').append(li);
+  var li = $('<li></li>');
+  var sender = message.from;
+  li.text(`${sender === 'Admin' ? '' : sender + ': '} ${message.text}`);
+  $('#messages').append(li);
+  $('[name=message]').val('');
 });
-
-// socket.emit(
-//   'createMessage',
-//   {
-//     from: 'Frank',
-//     text: 'Hi'
-//   },
-//   function(data) {
-//     console.log(data, ': Got It!');
-//   }
-// );
 
 jQuery('#message-form').on('submit', function(e) {
   e.preventDefault();
-  socket.emit(
-    'createMessage',
-    {
-      from: 'User',
-      text: jQuery('[name=message]').val()
-    },
-    function() {}
-  );
+  if ($('[name=message]').val()) {
+    var sender = $('[name=user_name]').val() || 'User';
+    socket.emit(
+      'createMessage',
+      {
+        from: sender,
+        text: $('[name=message]').val()
+      },
+      function(data) {
+        console.log(data);
+      }
+    );
+  }
 });
